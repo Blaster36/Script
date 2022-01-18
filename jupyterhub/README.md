@@ -9,3 +9,6 @@
   - jupyterhub_config.py
   - jupyterlab38_cmd.log
   - py38-notebook.ipynb
+
+## Screenshot
+![JupyterHubから起動した様子](screenshot.png)
