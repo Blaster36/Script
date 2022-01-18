@@ -1,0 +1,19 @@
+docker run -d -it --name test -p 8889:8889 -e GRANT_SUDO=yes quay.io/thoth-station/s2i-minimal-py38-notebook:v0.2.2
+docker stop test
+docker rm test
+
+docker build -t quay.io/thoth-station/s2i-minimal-py38-notebook:v1.0.0 -f Dockerfile.py38-mecab.lab .
+docker rmi quay.io/thoth-station/s2i-minimal-py38-notebook:v1.0.0
+
+docker image build -t jupyterhub/jupyterhub:1.0-py38 -f Dockerfile.hub .
+
+docker run -v /var/run/docker.sock:/var/run/docker.sock -p 8000:8000 -p 8001:8001 -p 8081:8081 \
+  -d --name jupyterhub --net jupyterhub jupyterhub/jupyterhub:1.0-py38
+
+docker logs jupyterhub
+docker exec -it jupyterhub /bin/bash
+
+docker stop jupyterhub
+docker rm jupyterhub
+
+docker rmi jupyterhub/jupyterhub:1.0-py38 --force

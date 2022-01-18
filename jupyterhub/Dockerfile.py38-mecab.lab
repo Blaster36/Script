@@ -1,0 +1,75 @@
+# docker build -t quay.io/thoth-station/s2i-minimal-py38-notebook:v1.0.0 -f Dockerfile.py38-mecab.lab .
+FROM quay.io/thoth-station/s2i-minimal-py38-notebook:v0.2.2
+
+USER root
+RUN cat /etc/redhat-release
+RUN cat /etc/os-release
+RUN python -V
+RUN python -m pip -V
+RUN virtualenv --version
+RUN which python{,3}
+RUN printenv
+RUN pwd
+WORKDIR /opt/app-root/src
+
+# install MeCab
+RUN dnf -y update
+#RUN dnf install -y bzip2 bzip2-devel gcc gcc-c++ git make wget curl openssl-devel readline-devel zlib-devel patch file
+RUN dnf install -y bzip2 bzip2-devel gcc gcc-c++ git make wget curl openssl-devel zlib-devel patch file
+
+RUN mkdir -p /opt/app-root/src/source/mecab
+WORKDIR /opt/app-root/src/source/mecab
+
+RUN wget 'https://drive.google.com/uc?export=download&id=0B4y35FiV1wh7cENtOXlicTFaRUE' -O mecab-0.996.tar.gz
+RUN tar zxvf mecab-0.996.tar.gz
+WORKDIR /opt/app-root/src/source/mecab/mecab-0.996
+
+RUN mkdir -p /opt/mecab
+
+RUN /opt/app-root/src/source/mecab/mecab-0.996/configure --prefix=/opt/mecab --with-charset=utf8 --enable-utf8-only
+RUN make
+RUN make install
+RUN /opt/mecab/bin/mecab -v
+
+RUN cat /opt/app-root/bin/activate
+RUN cat /opt/app-root/bin/activate | sed -n '44p'
+RUN sed -i '44a PATH="/opt/mecab/bin:/opt/mecab/libexec/mecab/:$VIRTUAL_ENV/bin:$PATH"' /opt/app-root/bin/activate
+RUN sed -ie '44d' /opt/app-root/bin/activate
+RUN cat /opt/app-root/bin/activate | sed -n '44p'
+
+RUN bash -c "echo \"/opt/mecab/lib\" > /etc/ld.so.conf.d/libmecab.conf"
+RUN ldconfig
+RUN ldconfig -p | grep mecab
+
+RUN mkdir /opt/app-root/src/source/mecab-ipadic
+WORKDIR /opt/app-root/src/source/mecab-ipadic
+
+RUN wget 'https://drive.google.com/uc?export=download&id=0B4y35FiV1wh7MWVlSDBCSXZMTXM' -O mecab-ipadic-2.7.0-20070801.tar.gz
+RUN tar zxvf mecab-ipadic-2.7.0-20070801.tar.gz
+WORKDIR /opt/app-root/src/source/mecab-ipadic/mecab-ipadic-2.7.0-20070801
+
+RUN /opt/app-root/src/source/mecab-ipadic/mecab-ipadic-2.7.0-20070801/configure --with-mecab-config=/opt/mecab/bin/mecab-config --with-charset=utf8
+RUN make
+RUN make install
+
+WORKDIR /opt/app-root/src
+RUN rm -rf /opt/app-root/src/source
+
+RUN date
+RUN ls -alhF /etc/localtime
+RUN strings /etc/localtime
+
+RUN ls -alhF /usr/share/zoneinfo/ | grep Japan
+RUN ls -alhF /usr/share/zoneinfo/Asia/ | grep Tokyo
+RUN ln -sf  /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+RUN date
+
+#RUN useradd -m jovyan
+#ENV HOME=/home/jovyan
+#WORKDIR $HOME
+#RUN id jovyan
+
+USER default
+
+RUN python -m pip install mecab-python3==0.996.5
+
