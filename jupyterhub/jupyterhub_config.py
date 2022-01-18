@@ -28,6 +28,7 @@ class DemoFormSpawner(DockerSpawner):
       <option value="nvcr.io/nvidia/pytorch:20.11-py3-gpu">nvcr.io/nvidia/pytorch(w/Hub)</option>
       <option value="jupyter/minimal-notebook:python-3.8.8">jupyter/minimal-notebook(py3.8)</option>
       <option value="quay.io/thoth-station/s2i-minimal-py38-notebook:v0.2.2">jupyter/s2i-minimal-notebook(py3.8)</option>
+      <option value="quay.io/thoth-station/s2i-minimal-py38-notebook:v1.0.0">jupyter/s2i-minimal-notebook(py3.8 w/MeCab)</option>
     </select>
     """.format(stack=default_stack)
 
