@@ -7,11 +7,12 @@
 ## 公開ファイル群
   - Dockerfile.hub
   - Dockerfile.py38-mecab.lab
-  - jupyterhub_config.py
   - cmd.log
+  - jupyterhub_config.py
   - py38-notebook.ipynb
   - py38-notebook2.ipynb
   - py38-notebook-mecab.ipynb
 
 ## Screenshot
 ![JupyterHubから起動した様子](screenshot.png)
+![MeCabで形態素解析をした様子](screenshot2.png)
