@@ -32,7 +32,7 @@
 
 ### py38-notebook-mecab.ipynb
   - JupyterLabコンテナで形態素解析を実行したときのサンプルNotebook
-  - dockerspawnerやldapauthenticatorのPythonライブラリを追加
+  - ChaSen互換および分かち書きの出力形式での動作をチェック
 
 ## Screenshot
 
