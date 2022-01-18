@@ -1,0 +1,16 @@
+FROM jupyterhub/jupyterhub:1.0
+
+RUN python3 -m pip install IPython==7.16.1
+RUN python3 -m pip install jupyter_client==6.1.12
+RUN python3 -m pip install jupyterhub==1.0.0
+RUN python3 -m pip install notebook==6.4.0
+RUN python3 -m pip install jupyterlab==1.2.14
+RUN python3 -m pip install dockerspawner==12.0.0
+RUN python3 -m pip install PyOpenSSL==19.1.0 ldap3==2.7 jupyterhub-ldapauthenticator==1.3.0
+
+WORKDIR /srv/jupyterhub
+COPY ./jupyterhub_config.py /srv/jupyterhub/
+
+EXPOSE 8000 8001 8081
+
+CMD ["jupyterhub", "-f", "/srv/jupyterhub/jupyterhub_config.py", "--debug"]

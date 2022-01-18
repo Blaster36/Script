@@ -1,0 +1,61 @@
+$ docker pull quay.io/jupyteronopenshift/s2i-minimal-notebook-py36:2.5.1
+2.5.1: Pulling from jupyteronopenshift/s2i-minimal-notebook-py36
+ab5ef0e58194: Pull complete
+b04f3cd8f5dc: Pull complete
+4bb32ba4aeb6: Pull complete
+0c1ab5ee9c31: Pull complete
+a1e9ac8155cb: Pull complete
+22d28bbf9f11: Pull complete
+89b2c4a2cf3a: Pull complete
+5b4ae0e01744: Pull complete
+b26b278f9607: Pull complete
+2b38540cca60: Pull complete
+130f6eb3fa00: Pull complete
+761fa8eeef7d: Pull complete
+Digest: sha256:b50095586f983221db236f61cd88cf695d51a27109cc6c6626175eb2a5604fa2
+Status: Downloaded newer image for quay.io/jupyteronopenshift/s2i-minimal-notebook-py36:2.5.1
+quay.io/jupyteronopenshift/s2i-minimal-notebook-py36:2.5.1
+$ docker pull quay.io/thoth-station/s2i-minimal-py38-notebook:v0.2.2
+v0.2.2: Pulling from thoth-station/s2i-minimal-py38-notebook
+ce3c6836540f: Pull complete
+63f9f4c31162: Pull complete
+d49355ce848e: Pull complete
+0fc972655972: Pull complete
+dc5893115de5: Pull complete
+fe49194f988b: Pull complete
+361bb102c025: Pull complete
+3d1e52e39958: Pull complete
+0961107d69ee: Pull complete
+a6441de26caf: Pull complete
+a7049a550f72: Pull complete
+aac36de4a130: Pull complete
+be5e282b49fa: Pull complete
+Digest: sha256:f071adc4243ead23cd34838dcff548553da7910be0cd25731c7a4c086c412c8d
+Status: Downloaded newer image for quay.io/thoth-station/s2i-minimal-py38-notebook:v0.2.2
+quay.io/thoth-station/s2i-minimal-py38-notebook:v0.2.2
+
+docker run -d -it --name test -p 8889:8889 -e GRANT_SUDO=yes quay.io/thoth-station/s2i-minimal-py38-notebook:v0.2.2
+
+
+docker build -t quay.io/thoth-station/s2i-minimal-py38-notebook:v1.0.0 -f Dockerfile.38lab .
+
+docker run -d -it --name test -p 8888:8888 -e GRANT_SUDO=yes quay.io/thoth-station/s2i-minimal-py38-notebook:v1.0.0
+
+docker stop test
+docker rm test
+docker rmi quay.io/thoth-station/s2i-minimal-py38-notebook:v1.0.0
+
+
+docker image build -t jupyterhub/jupyterhub:1.0-py38 -f Dockerfile.hub .
+
+docker run -v /var/run/docker.sock:/var/run/docker.sock -p 8000:8000 -p 8001:8001 -p 8081:8081 \
+  -d --name jupyterhub --net jupyterhub jupyterhub/jupyterhub:1.0-py38
+
+docker logs jupyterhub
+docker exec -it jupyterhub /bin/bash
+
+docker stop jupyterhub
+docker rm jupyterhub
+
+docker rmi jupyterhub/jupyterhub:1.0-py38 --force
+
