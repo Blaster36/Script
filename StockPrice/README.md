@@ -6,6 +6,8 @@
   - [【Pythonでファイナンス分析（株・FX）】日本発祥のテクニカル指標「一目均衡表」の作成方法](https://kino-code.com/python_finance-02/)
   - [超簡単Pythonで株価予測（LightGBM 利用）機械学習](https://note.com/10mohi6/n/n4b1196fea816)
   - [超簡単Pythonで株価予測（Optuna・LightGBM 利用）ハイパーパラメータ自動最適化](https://note.com/10mohi6/n/n46d1bb0267b7)
+  - [機械学習による株価予測（LightGBM）](https://book-read-yoshi.hatenablog.com/entry/2021/04/19/AI-machine-learning-stock-prediction-lightgbm)
+  - [機械学習で株価予測（TA-LibとLightGBMを使った学習モデル構築）](https://nehori.com/nikki/2020/01/26/post-15231/)
 
 ## 公開ファイル群
 
