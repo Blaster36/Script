@@ -1,4 +1,4 @@
-# 株価予測 w/LightGBM
+# 株価予測 w/TA-Lib+LightGBM+Optuna
 
 ## 参考
   - [Pythonで将来予測｜株価データを使ってpythonで機械学習をしてみよう【データ加工、データ整形、予測モデル作成、株価データの分類予測、予測精度の確認まで】](https://www.youtube.com/watch?v=asfWaVpCyl8)
