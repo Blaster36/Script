@@ -19,9 +19,10 @@
   - MeCab本体および操作Client（mecab-python3）のPythonライブラリを追加
 
 ### predStockPrice-LightGBM1.ipynb
+  - データの収集および整形
   - 特徴量設計
-  - データ可視化
 
-### predStockPrice-LightGBM1.ipynb
+### predStockPrice-LightGBM2.ipynb
   - 予測モデルの作成（含むハイパーパラメータのチューニング）
   - 予測精度の確認
+  - 特徴量重要度の確認（可視化）
