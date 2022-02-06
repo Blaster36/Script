@@ -18,8 +18,10 @@
   - Anacondaベース、rootアカウント起動
   - MeCab本体および操作Client（mecab-python3）のPythonライブラリを追加
 
-### predStockPriceKino-LightGBM.ipynb
+### predStockPrice-LightGBM1.ipynb
   - 特徴量設計
   - データ可視化
+
+### predStockPrice-LightGBM1.ipynb
   - 予測モデルの作成（含むハイパーパラメータのチューニング）
   - 予測精度の確認
