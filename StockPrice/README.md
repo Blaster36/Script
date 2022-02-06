@@ -1,7 +1,7 @@
 # 株価予測 w/LightGBM
 
 ## 参考
-  - [Pythonで将来予測｜株価データを使ってpythonで機械学習をしてみよう【データ加工、データ整形、予測モデル作成、株価データの分類予測、予測精度の確認まで】](https://www.youtube.com/watch?v=asfWaVpCyl8&t=1250s)
+  - [Pythonで将来予測｜株価データを使ってpythonで機械学習をしてみよう【データ加工、データ整形、予測モデル作成、株価データの分類予測、予測精度の確認まで】](https://www.youtube.com/watch?v=asfWaVpCyl8)
   - [Pythonで株価のデータ分析｜株価分析を通してpythonによるデータ分析でできることを学びましょう【株価のデータ取得から、データ加工、指標の追加、グラフ化まで】](https://kino-code.com/python_automation_stock_analysis2/)
   - [Pythonのファイナンス（株 , FX）に特化したライブラリの使い方を解説【データ可視化、チャート分析を中心に進めていきます】](https://kino-code.com/python_finance-01/)
   - [【Pythonでファイナンス分析（株・FX）】日本発祥のテクニカル指標「一目均衡表」の作成方法](https://kino-code.com/python_finance-02/)
