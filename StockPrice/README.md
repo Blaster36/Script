@@ -23,6 +23,12 @@
   - 特徴量設計
 
 ### predStockPrice-LightGBM2.ipynb
+  #### predStockPrice-LightGBM2-1.ipynb
   - 予測モデルの作成（含むハイパーパラメータのチューニング）
   - 予測精度の確認
+  #### predStockPrice-LightGBM2-2.ipynb
   - 特徴量重要度の確認（可視化）
+  - lightgbm.plot_importance（棒グラフ図）とlightgbm.Booster.trees_to_dataframe（DataFrame）を利用
+
+### download.ipynb
+  - Yahoo!ファイナンスから株価データを取得
