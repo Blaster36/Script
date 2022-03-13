@@ -31,4 +31,5 @@
   - lightgbm.plot_importance（棒グラフ図）とlightgbm.Booster.trees_to_dataframe（DataFrame）を利用
 
 ### download.ipynb
+### download2.ipynb
   - Yahoo!ファイナンスから株価データを取得
