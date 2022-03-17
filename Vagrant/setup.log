@@ -1,0 +1,35 @@
+wget https://releases.hashicorp.com/vagrant/2.2.19/vagrant_2.2.19_x86_64.deb
+sudo dpkg -i vagrant_2.2.19_x86_64.deb
+sudo apt update
+sudo apt build-dep vagrant ruby-libvirt
+sudo apt install -y qemu libvirt-bin ebtables dnsmasq
+sudo apt install -y libvirt-clients qemu-utils qemu-kvm virtinst libvirt-bin
+sudo apt install -y libxslt-dev libxml2-dev libvirt-dev zlib1g-dev ruby-dev
+sudo apt install -y vagrant-libvirt
+sudo shutdown -r now
+
+vagrant version
+vagrant plugin install vagrant-libvirt
+vagrant plugin install vagrant-disksize
+vagrant plugin install vagrant-proxyconf
+vagrant plugin install vagrant-vbguest
+vagrant plugin list
+
+id
+sudo usermod -aG libvirt $(whoami)
+
+cd vagrant/
+mkdir vagrant-test && cd vagrant-test
+vagrant init generic/centos7
+vagrant init generic/ubuntu1804
+vim Vagrantfile
+vagrant up --provider=libvirt
+vagrant ssh-config
+vagrant ssh
+vagrant halt
+
+rm -rf .vagrant/
+
+virsh list --all
+virsh vol-list default
+
