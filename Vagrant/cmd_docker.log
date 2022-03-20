@@ -1,0 +1,30 @@
+# Dockerインストール
+sudo apt -y install     apt-transport-https     ca-certificates     curl     gnupg-agent     software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+sudo apt update
+sudo apt -y install docker-ce docker-ce-cli containerd.io
+docker images
+sudo docker images
+sudo usermod -a -G docker ubuntu
+id
+docker version
+docker images
+docker ps -a
+
+# Pythonインストール
+sudo apt install -y python3-pip
+python3 -m pip list
+python3 -m pip install pip -U
+python3 -m pip list
+
+# MeCabインストール
+sudo apt-get install -y mecab libmecab-dev mecab-ipadic
+sudo apt-get install -y mecab-ipadic-utf8
+sudo apt-get install -y libc6-dev build-essential
+mecab -v
+python3 -m pip install mecab-python3==0.996.5
+which pip3
+pip3 list

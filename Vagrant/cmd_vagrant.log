@@ -1,0 +1,56 @@
+# Vagrantインストール
+sudo dpkg -i vagrant_2.2.19_x86_64.deb
+sudo dpkg -i virtualbox-6.1_6.1.32-149290_Ubuntu_bionic_amd64.deb
+
+sudo apt update
+#sudo apt -y build-dep vagrant ruby-libvirt
+
+# これを実行すると、怒られる
+sudo apt install -y qemu libvirt-bin ebtables dnsmasq
+# 案内に従って、まずは直す
+sudo apt --fix-broken install
+
+# 改めて順にインストール
+sudo apt install -y qemu libvirt-bin ebtables dnsmasq
+sudo apt install -y libvirt-clients qemu-utils qemu-kvm virtinst libvirt-bin
+sudo apt install -y libxslt-dev libxml2-dev libvirt-dev zlib1g-dev ruby-dev
+
+# VagrantPluginインストール
+sudo apt install -y vagrant-libvirt
+vagrant plugin list
+vagrant plugin install vagrant-libvirt
+vagrant plugin install vagrant-disksize
+vagrant plugin install vagrant-proxyconf
+vagrant plugin install vagrant-vbguest
+vagrant plugin list
+
+# OS再起動
+sudo reboot -h now
+
+# Libvirtグループ追加
+#sudo usermod -a -G libvirt ubuntu
+# デフォルトProvider設定
+#export VAGRANT_DEFAULT_PROVIDER=libvirt
+
+# Ubuntu18.04起動
+cd vagrant/
+rm -rf .vagrant/
+
+vim Vagrantfile
+
+vagrant up
+vagrant up --provider=libvirt
+vagrant halt
+
+vagrant ssh-config
+vagrant ssh
+
+virsh list --all
+virsh destroy ubuntu18_default
+virsh undefine ubuntu18_default
+virsh list --all
+
+virsh vol-list default
+virsh vol-delete /var/lib/libvirt/images/ubuntu18_default.img
+virsh vol-delete /var/lib/libvirt/images/generic-VAGRANTSLASH-ubuntu1804_vagrant_box_image_3.6.10_box.img
+virsh vol-list default

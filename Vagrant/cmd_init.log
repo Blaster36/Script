@@ -1,0 +1,42 @@
+# 状態確認
+id
+cat /etc/os-release
+cat /etc/lsb-release
+python -V
+python3 -V
+
+# パッケージ最新化
+sudo apt-get update
+sudo apt update
+sudo apt-get upgrade
+sudo apt upgrade
+sudo apt-get install -y vim
+
+# Alias設定
+vim .bashrc 
+source .bashrc
+
+# ディスク拡張
+df -h
+lsblk
+sudo lvextend -l +100%FREE ubuntu--vg-ubuntu--lv
+sudo lvs
+sudo vgs
+sudo lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv
+sudo lvs
+sudo vgs
+df -h
+sudo resize2fs /dev/ubuntu-vg/ubuntu-lv
+df -h
+
+# Timezone変更
+date
+timedatectl
+timedatectl list-timezones | grep -i tokyo
+sudo timedatectl set-timezone Asia/Tokyo
+timedatectl
+date
+
+# Desktop環境インストール
+sudo apt-get -y install ubuntu-desktop
+sudo reboot -h now
