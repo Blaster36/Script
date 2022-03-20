@@ -1,0 +1,1 @@
+# Vagrantfile for CentOS7
