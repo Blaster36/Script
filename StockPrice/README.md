@@ -33,3 +33,8 @@
 ### download.ipynb
 ### download2.ipynb
   - Yahoo!ファイナンスから株価データを取得
+
+### predStockPrice-Prophet1.ipynb
+  - データの収集および整形
+  - 予測モデルの作成
+  - 予測結果の確認
