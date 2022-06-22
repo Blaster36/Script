@@ -1,0 +1,57 @@
+# Host
+docker pull ubuntu:22.04
+docker pull ubuntu:20.04
+docker pull ubuntu:18.04
+
+docker run -d -it --name hoge -e GRANT_SUDO=yes ubuntu:22.04
+docker exec -u root -it hoge /bin/bash
+
+docker commit hoge ubuntu:20.04-ft
+docker save ubuntu:20.04-ft > ubuntu_20.04-ft.tar
+docker save ubuntu:20.04-ft | gzip -c > ubuntu_20.04-ft.tar.gz
+
+# Container
+
+## How to Install Python 3.9 on Ubuntu 22.04 using APT
+apt update
+apt install software-properties-common
+add-apt-repository ppa:deadsnakes/ppa
+apt install python3.9
+apt install python3-pip
+python3.9 --version
+python3.9 -m pip --version
+
+## How to install Python 3.9 on Ubuntu 22.04 from source
+apt update
+apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev wget libbz2-dev -y
+wget https://www.python.org/ftp/python/3.9.7/Python-3.9.7.tgz
+tar -xvf Python-3.9.7.tgz
+cd Python-3.9.7/
+./configure --enable-optimizations
+make
+make altinstall
+python3.9 --version
+python3.9 -m pip --version
+rm Python-3.9.7.tgz
+
+## How to Install fastText on Ubuntu 22.04 using APT
+apt -y install git
+apt -y install make gcc g++
+
+git --version
+make -v
+gcc -v
+g++ -v
+
+cd /opt
+pwd
+git clone https://github.com/facebookresearch/fastText.git
+cd fastText
+#make
+
+python3.9 -m pip install pip -U
+python3.9 -m pip install pybind11
+#python3.9 -m pip install fasttext
+python3.9 -m pip install .
+python3.9 -m pip install gensim
+python3.9 -m pip list
