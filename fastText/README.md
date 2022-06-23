@@ -19,3 +19,8 @@
 ### test.ipynb
   - CodeSnippet（含む概説Markdown）
   - Windows10／Python3.9ベース
+
+### Dockerfle/fastTextonUbuntu.log
+  - Dockerコンテナイメージのビルド設定
+  - Ubuntu 20.04ベース
+  - コンパイラとfastText含むPythonライブラリをインストール済み
