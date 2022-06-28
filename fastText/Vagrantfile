@@ -1,0 +1,29 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.define "ubuntu" do |ubuntu|
+    ubuntu.vm.box = "generic/ubuntu1804"
+    ubuntu.vm.box_download_insecure = true
+    ubuntu.vm.box_version = "3.6.10"
+    ubuntu.vm.hostname = "ubuntu18"
+    ubuntu.vm.box_check_update = false
+    ubuntu.vm.network "forwarded_port", guest: 8888, guest_ip: "100.0.0.110", host: 18888, host_ip: "192.168.10.19"
+    ubuntu.vm.network "private_network", ip: "100.0.0.110"
+    ubuntu.disksize.size = '100GB'
+
+    ubuntu.vm.provider "virtualbox" do |v|
+      #v.kvm_hidden = true
+      v.name = "fasttext"
+      v.cpus = "4"
+      v.memory = "8192"
+    end
+
+    ubuntu.vm.provision "shell", inline: <<-SHELL
+      # timezoneを日本に変更
+      timedatectl set-timezone Asia/Tokyo
+      # localeを日本に変更
+      localectl set-locale LANG=ja_JP.UTF-8
+    SHELL
+  end
+end
