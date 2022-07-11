@@ -1,0 +1,42 @@
+---
+title: Virtualboxの仮想マシンをコマンドラインから操作
+tags: Linux Ubuntu VirtualBox
+author: tukiyo3
+slide: false
+ur: https://qiita.com/tukiyo3/items/5ecea7f95cb961f07194
+---
+
+## 一覧表示
+```bash:
+$ VBoxManage list vms
+"master" {78bf3077-a246-4377-b099-403055b39eb1}
+"worker" {7ebeded9-9b04-47a5-864f-beedb3c3b7bf}
+"Windows10" {2c9806a6-b69b-4f74-b378-4a68eb3f19f7}
+```
+
+## 起動
+```bash:
+$ VBoxManage startvm Windows10 --type headless
+```
+
+## 起動中一覧
+```bash:
+$ VBoxManage list runningvms
+"Windows10" {2c9806a6-b69b-4f74-b378-4a68eb3f19f7}
+```
+
+## シャットダウン開始
+```bash:
+$ VBoxManage controlvm Windows10 acpipowerbutton
+```
+
+## 電源OFF
+```bash:
+$ VBoxManage controlvm Windows10 poweroff
+```
+
+
+## サスペンド
+```bash:
+$ VBoxManage controlvm Windows10 savestate
+```
