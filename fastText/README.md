@@ -13,6 +13,7 @@
   - [機械学習は「𝑥 = ‘松本人志’ + ‘浜田雅功’ 」にどうこたえる？](https://qiita.com/hima2b4/items/feed7ac03914d96a8473)
   - [類似語を二次元グラフ化　～word2vec & fastText～](https://qiita.com/hima2b4/items/0123158097c7840f7b4e)
   - [ローカル インストール用の Visual Studio のオフライン インストール パッケージを作成する](https://docs.microsoft.com/ja-jp/visualstudio/install/create-an-offline-installation-of-visual-studio?view=vs-2019)
+  - [Virtualboxの仮想マシンをコマンドラインから操作](https://qiita.com/tukiyo3/items/5ecea7f95cb961f07194)
 
 ## 公開ファイル群
 
