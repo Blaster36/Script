@@ -1,0 +1,19 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.define "jupyter" do |jupyter|
+    jupyter.vm.box_download_insecure = true    
+    jupyter.vm.box = "bento/ubuntu-20.04"
+    jupyter.vm.box_check_update = false
+    jupyter.vm.network "forwarded_port", guest: 8888, guest_ip: "10.0.2.15", host: 18888, host_ip: "192.168.10.19"
+    jupyter.vm.hostname = "jupyter"
+    jupyter.disksize.size = '100GB'
+    jupyter.vm.provider "virtualbox" do |v|
+      #v.kvm_hidden = true
+      v.name = "jupyter"
+      v.memory = 8192
+      v.cpus = 4
+    end
+  end
+end

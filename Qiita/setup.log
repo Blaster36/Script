@@ -1,0 +1,55 @@
+# aptのアップグレード
+sudo apt update
+sudo apt-get update
+sudo apt upgrade
+sudo apt-get upgrade
+
+# zip/unzipのインストール
+sudo apt install -y zip unzip
+
+# Node.jsのインストール
+curl -fsSL https://deb.nodesource.com/setup_current.x | sudo -E bash -
+sudo apt-get update
+sudo apt-get install -y nodejs
+#sudo apt-get install -y gcc g++ make
+node -v
+
+# pipのインストール&アップグレード
+python3 -V
+python3 -m pip --version
+
+sudo apt install -y python3-pip # ★ココでgcc g++ makeもインストールされる
+python3 -m pip install pip -U
+python3 -m pip --version
+
+# mecabのインストール（本体と、Pythonインターフェース）
+sudo apt-get install -y mecab libmecab-dev mecab-ipadic mecab-ipadic-utf8 libc6-dev build-essential
+mecab -v
+python3 -m pip install mecab-python3==0.996.5
+
+# Graphvizのインストール（本体と、Pythonインターフェース）
+sudo apt install -y graphviz
+sudo apt install -y graphviz-dev # ★後続のpygraphvizインストールでErrが発生するので追加
+dot -V
+python3 -m pip install pygraphviz
+
+# 分析ライブラリ群のインストール
+python3 -m pip install networkx plotly scikit-learn numpy scipy pandas matplotlib
+
+# Jupyterのインストール
+python3 -m pip install jupyter jupyterlab
+
+# Pythonライブラリ群のVer.確認
+python3 -m pip list > pip_list.log
+python3 -m pip freeze > pip_freeze.log
+
+# Jupyterの起動
+which jupyter
+jupyter lab --no-browser --allow-root --ip=0.0.0.0
+
+# フォントのインストール
+sudo apt install -y fonts-ipafont
+sudo apt install -y fonts-ipaexfont
+fc-cache -fv
+fc-list | grep -i ipa
+python3 -m pip install japanize-matplotlib
