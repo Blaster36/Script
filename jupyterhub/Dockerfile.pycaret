@@ -1,0 +1,24 @@
+# build image ...
+# docker build -t pycaret/full:python-3.8.16 -f Dockerfile.pycaret . --no-cache
+FROM pycaret/full:latest
+
+#USER default
+USER jovyan
+
+#RUN python -m pip install pip -U
+#RUN python -m pip install jupyterhub==3.0.0 jupyterlab==3.4.8 jupyterlab_server==2.15.2
+RUN python -m pip install jupyterhub==3.0.0 jupyterlab==3.4.8
+RUN rm -rf ~/.cache/pip
+
+USER root
+
+#RUN useradd -u 1001 -m default
+#ENV HOME=/home/default
+#WORKDIR $HOME
+#RUN id default
+RUN usermod -u 1001 jovyan
+
+RUN fix-permissions "${CONDA_DIR}"
+RUN fix-permissions "/home/${NB_USER}"
+
+USER jovyan

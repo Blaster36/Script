@@ -1,5 +1,5 @@
-# docker build -t quay.io/thoth-station/s2i-minimal-py38-notebook:v1.0.0 -f Dockerfile.py38-mecab.lab .
-FROM quay.io/thoth-station/s2i-minimal-py38-notebook:v0.2.2
+# docker build -t quay.io/thoth-station/s2i-minimal-py38-notebook:v1.0.0-MeCab -f Dockerfile.py38-mecab.lab . --no-cache
+FROM quay.io/thoth-station/s2i-minimal-py38-notebook:v1.0.0
 
 USER root
 RUN cat /etc/redhat-release
@@ -54,6 +54,7 @@ RUN make install
 
 WORKDIR /opt/app-root/src
 RUN rm -rf /opt/app-root/src/source
+RUN dnf clean all
 
 RUN date
 RUN ls -alhF /etc/localtime
@@ -71,5 +72,7 @@ RUN date
 
 USER default
 
-RUN python -m pip install mecab-python3==0.996.5
-
+RUN python -m pip install pip -U
+RUN python -m pip install mecab-python3 janome mojimoji gensim scikit-learn pandas pandas_datareader lightgbm xgboost optuna matplotlib japanize-matplotlib seaborn plotly wordcloud pycaret ldap3
+#RUN python -m pip cache purge
+RUN rm -rf ~/.cache/pip

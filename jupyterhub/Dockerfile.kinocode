@@ -1,0 +1,23 @@
+# build image ...
+# docker build -t jupyter/minimal-notebook:python-3.8.8-TALib -f Dockerfile.kinocode . --no-cache
+# docker run -d -it --name kinocode -p 8888:8888 jupyter/minimal-notebook:python-3.8.8-TALib
+FROM jupyter/minimal-notebook:python-3.8.8
+
+USER root
+RUN apt-get update && apt-get install -y sudo wget vim curl gawk make gcc
+RUN apt-get install -y iputils-ping net-tools mecab libmecab-dev mecab-ipadic mecab-ipadic-utf8 libc6-dev build-essential
+RUN wget --quiet http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz -O ta-lib-0.4.0-src.tar.gz && \
+    tar xvf ta-lib-0.4.0-src.tar.gz && \
+    cd ta-lib/ && \
+    ./configure --prefix=/usr && \
+    make && \
+    sudo make install && \
+    cd .. && \
+    pip install TA-Lib && \
+    rm -R ta-lib ta-lib-0.4.0-src.tar.gz
+RUN apt clean
+
+USER jovyan
+RUN pip install pip -U
+RUN pip install pandas_datareader mplfinance mecab-python3 scikit-learn lightgbm optuna matplotlib seaborn plotly
+RUN pip cache purge

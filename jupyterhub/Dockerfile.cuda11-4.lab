@@ -1,0 +1,31 @@
+# build image ...
+# docker build -t nvidia/cuda:11.4.0-cudnn8-devel-ubuntu20.04-lab -f Dockerfile.cuda11-4.lab . --no-cache
+FROM nvidia/cuda:11.4.0-cudnn8-devel-ubuntu20.04
+
+# set user and working-dir
+USER root
+WORKDIR /root
+
+# install lspci, python3, python3-pip
+RUN apt update
+RUN apt install -y pciutils iputils-ping net-tools python3 python3-pip
+
+# copy artifacts
+COPY ./cuda/pip_freeze_cuda11-4.log /root
+
+# install pip and jupyter, jupyterlab, etc.
+RUN python3 -m pip install pip -U
+RUN python3 -m pip install install -r /root/pip_freeze_cuda11-4.log
+
+# open port
+EXPOSE 8888
+
+# create home-dir
+RUN useradd -s /bin/bash -m jovyan
+ENV HOME=/home/jovyan
+WORKDIR $HOME
+USER jovyan
+
+# set init-command
+#CMD ["/opt/nvidia/nvidia_entrypoint.sh", "jupyter", "lab", "--allow-root", "--no-browser", "--ip=0.0.0.0", "--port=8888"]
+CMD ["jupyterhub-singleuser"]

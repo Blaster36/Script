@@ -1,12 +1,11 @@
+# build image ...
+# docker image build -t jupyterhub/jupyterhub:1.0-cuda -f Dockerfile.hub . --no-cache
 FROM jupyterhub/jupyterhub:1.0
 
-RUN python3 -m pip install IPython==7.16.1
-RUN python3 -m pip install jupyter_client==6.1.12
 RUN python3 -m pip install jupyterhub==1.0.0
-RUN python3 -m pip install notebook==6.4.0
-RUN python3 -m pip install jupyterlab==1.2.14
-RUN python3 -m pip install dockerspawner==12.0.0
-RUN python3 -m pip install PyOpenSSL==19.1.0 ldap3==2.7 jupyterhub-ldapauthenticator==1.3.0
+RUN python3 -m pip install IPython==7.16.1 jupyter_client==6.1.12 notebook==6.4.0 jupyterlab==1.2.14
+RUN python3 -m pip install docker==5.0.3 dockerspawner==12.0.0 escapism==1.0.1
+RUN python3 -m pip install PyOpenSSL==19.1.0 ldap3==2.7 jupyterhub-ldapauthenticator==1.3.0 pyasn1==0.4.8
 
 WORKDIR /srv/jupyterhub
 COPY ./jupyterhub_config.py /srv/jupyterhub/
