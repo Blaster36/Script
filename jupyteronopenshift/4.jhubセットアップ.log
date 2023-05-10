@@ -1,0 +1,76 @@
+# SSH login to CRC-VM.
+export CRC_IP=$(crc ip)
+printenv CRC_IP
+ssh -i ~/.crc/machines/crc/id_ecdsa core@$CRC_IP
+ssh -i ~/.crc/machines/crc/id_ecdsa core@192.168.130.11
+
+# Pull ContainerImages.
+docker pull quay.io/jupyteronopenshift/jupyterhub:3.4.0
+docker pull quay.io/jupyteronopenshift/s2i-minimal-notebook-py36:2.5.1
+docker pull postgres:9.6
+docker pull jupyter/pyspark-notebook:python-3.8
+docker pull quay.io/thoth-station/s2i-minimal-py38-notebook:v1.0.0
+
+# Login to OpenShift
+oc login -u kubeadmin -p axJiX-PqCC7-FN4Ps-8LqQj https://api.crc.testing:6443
+oc login -u kubeadmin -p RnTX3-Fj4TX-NoF4W-W4g9t https://api.crc.testing:6443
+oc login -u kubeadmin -p vskdc-vjAHx-82XKb-th72D https://api.crc.testing:6443
+
+# Creating Project.
+PROJECT=jupyter
+oc new-project $PROJECT
+
+# Creating ServiceAccount.
+oc create serviceaccount jupyter -n $PROJECT
+oc adm policy add-role-to-user edit -z jupyter -n $PROJECT
+oc adm policy add-scc-to-user anyuid -z jupyter -n $PROJECT
+
+# Set HTTP-Access to ImageRegistry.
+vim /etc/docker/daemon.json
+{"insecure-registries": ["default-route-openshift-image-registry.apps-crc.testing:443"]}
+systemctl restart docker
+docker info 2> /dev/null | tail -5
+
+[cent@centos7 ~]$ oc whoami -t
+sha256~p6CQwlXTiC4_Nsd1ev_R4CeJPT_X3kGT9W-AyKuUHZs
+
+# Creating ImageStreams.
+oc whoami -t | docker login -u kubeadmin --password-stdin https://default-route-openshift-image-registry.apps-crc.testing:443
+docker tag quay.io/jupyteronopenshift/jupyterhub:3.4.0 default-route-openshift-image-registry.apps-crc.testing:443/jupyter/jupyterhub:3.4.0
+docker tag quay.io/jupyteronopenshift/s2i-minimal-notebook-py36:2.5.1 default-route-openshift-image-registry.apps-crc.testing:443/jupyter/s2i-minimal-notebook-py36:2.5.1
+docker tag postgres:9.6 default-route-openshift-image-registry.apps-crc.testing:443/jupyter/postgres:9.6
+docker tag jupyter/pyspark-notebook:python-3.8 default-route-openshift-image-registry.apps-crc.testing:443/jupyter/pyspark-notebook:python-3.8
+docker tag quay.io/thoth-station/s2i-minimal-py38-notebook:v1.0.0 default-route-openshift-image-registry.apps-crc.testing:443/jupyter/s2i-minimal-py38-notebook:v1.0.0
+docker push default-route-openshift-image-registry.apps-crc.testing:443/jupyter/jupyterhub:3.4.0
+docker push default-route-openshift-image-registry.apps-crc.testing:443/jupyter/s2i-minimal-notebook-py36:2.5.1
+docker push default-route-openshift-image-registry.apps-crc.testing:443/jupyter/postgres:9.6
+docker push default-route-openshift-image-registry.apps-crc.testing:443/jupyter/pyspark-notebook:python-3.8
+docker push default-route-openshift-image-registry.apps-crc.testing:443/jupyter/s2i-minimal-py38-notebook:v1.0.0
+docker logout https://default-route-openshift-image-registry.apps-crc.testing:443
+
+docker tag jupyter/pyspark-notebook:python-3.8-ffdep default-route-openshift-image-registry.apps-crc.testing:443/jupyter/pyspark-notebook:python-3.8-ffdep
+docker push default-route-openshift-image-registry.apps-crc.testing:443/jupyter/pyspark-notebook:python-3.8-ffdep
+docker tag jupyter/pyspark-notebook:python-3.8-ffdep2 default-route-openshift-image-registry.apps-crc.testing:443/jupyter/pyspark-notebook:python-3.8-ffdep2
+docker push default-route-openshift-image-registry.apps-crc.testing:443/jupyter/pyspark-notebook:python-3.8-ffdep2
+docker tag jupyter/pyspark-notebook:python-3.8-ffdep3 default-route-openshift-image-registry.apps-crc.testing:443/jupyter/pyspark-notebook:python-3.8-ffdep3
+docker push default-route-openshift-image-registry.apps-crc.testing:443/jupyter/pyspark-notebook:python-3.8-ffdep3
+
+# Creating PV.
+;oc create -f jupyterhub-deployer_pv.json
+oc apply -f jupyterhub-deployer_pv.json
+
+# Creating PV and PVC for users.
+oc apply -f jupyterhub_pv_admin.json
+oc apply -f jupyterhub_pv_jupyter.json
+oc apply -f jupyterhub_pvc_jupyter.json
+oc apply -f jupyterhub_pvc_admin.json
+
+# Creating Secret.
+;oc create -f jupyterhub_secret.json
+
+# Creating ConfigMaps/
+;oc create configmap spawner --from-file=spawner.py
+
+# Creating Template.
+;oc create -f jupyterhub-deployer_template.json
+oc apply -f jupyterhub-deployer_template.json

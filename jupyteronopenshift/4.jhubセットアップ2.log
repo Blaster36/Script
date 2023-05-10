@@ -1,0 +1,15 @@
+# Deleting Resources.
+oc project jupyter
+oc delete dc/jupyterhub
+oc delete dc/jupyterhub-db
+oc delete svc/jupyterhub
+oc delete svc/jupyterhub-db
+oc delete route/jupyterhub
+oc delete cm/jupyterhub-cfg
+oc delete pvc/pvc-jupyterhub-db
+oc delete pv/pv-jupyterhub-db
+oc delete template/jupyterhub-deployer
+
+;oc delete secret/secret-jhubpsgr
+;oc delete cm/spawner
+;oc delete project/jupyter

@@ -1,0 +1,27 @@
+{
+    "kind": "PersistentVolume",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "pv-jupyterhub-db",
+        "labels": {
+            "app": "jupyterhub"
+        }
+    },
+    "spec": {
+        "capacity": {
+            "storage": "1Gi"
+        },
+        "accessModes": [
+            "ReadWriteOnce"
+        ],
+        "nfs": {
+            "path": "/var/share/nfs/jupyterhub-db",
+            "server": "192.168.68.19"
+        },
+        "persistentVolumeReclaimPolicy": "Retain",
+        "claimRef": {
+            "name": "pvc-jupyterhub-db",
+            "namespace": "jupyter"
+        }
+    }
+}

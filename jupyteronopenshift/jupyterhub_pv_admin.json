@@ -1,0 +1,27 @@
+{
+    "kind": "PersistentVolume",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "pv-admin",
+        "labels": {
+            "app": "jupyterhub"
+        }
+    },
+    "spec": {
+        "capacity": {
+            "storage": "1Gi"
+        },
+        "accessModes": [
+            "ReadWriteOnce"
+        ],
+        "nfs": {
+            "path": "/var/share/nfs/dir-admin",
+            "server": "192.168.68.19"
+        },
+        "persistentVolumeReclaimPolicy": "Retain",
+        "claimRef": {
+            "name": "pvc-admin",
+            "namespace": "jupyter"
+        }
+    }
+}
