@@ -1,0 +1,21 @@
+{
+    "kind": "PersistentVolumeClaim",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "pvc-sharedrwx",
+        "labels": {
+            "app": "jupyterhub"
+        }
+    },
+    "spec": {
+        "resources": {
+            "requests": {
+                "storage": "1Gi"
+            }
+        },
+        "accessModes": [
+            "ReadWriteMany"
+        ],
+        "volumeName": "pv-sharedrwx"
+    }
+}

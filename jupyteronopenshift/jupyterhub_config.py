@@ -43,6 +43,10 @@
                   {
                     "name": "data",
                     "mountPath": "/home/jovyan"
+                  },
+                  {
+                    "name": "shared",
+                    "mountPath": "/home/shared"
                   }
                 ]
             }
@@ -56,11 +60,21 @@
             "persistentVolumeClaim": {
                 "claimName": c.KubeSpawner.pvc_name_template
             }
+        },
+        {
+            "name": "shared",
+            "persistentVolumeClaim": {
+                "claimName": "pvc-sharedrwx"
+            }
         }
     ]
     c.KubeSpawner.volume_mounts = [
         {
             "name": "data",
             "mountPath": "/opt/app-root/src"
+        },
+        {
+            "name": "shared",
+            "mountPath": "/opt/app-root/shared"
         }
     ]
