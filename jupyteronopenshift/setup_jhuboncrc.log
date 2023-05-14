@@ -1,0 +1,83 @@
+# SSH login to CRC-VM.
+export CRC_IP=$(crc ip)
+printenv CRC_IP
+ssh -i ~/.crc/machines/crc/id_ecdsa core@$CRC_IP
+ssh -i ~/.crc/machines/crc/id_ecdsa core@192.168.130.11
+
+# Pull ContainerImages.
+docker pull quay.io/jupyteronopenshift/jupyterhub:3.4.0
+docker pull postgres:9.6
+docker pull quay.io/jupyteronopenshift/s2i-minimal-notebook-py36:2.5.1
+docker pull quay.io/thoth-station/s2i-minimal-py38-notebook:v1.0.0
+docker pull jupyter/pyspark-notebook:python-3.8
+
+# Login to OpenShift
+oc login -u kubeadmin -p vskdc-vjAHx-82XKb-th72D https://api.crc.testing:6443
+
+# Creating Project.
+PROJECT=jupyter
+oc new-project $PROJECT
+
+# Creating ServiceAccount.
+;oc create serviceaccount jupyter -n $PROJECT
+;oc adm policy add-role-to-user edit -z jupyter -n $PROJECT
+;oc adm policy add-scc-to-user anyuid -z jupyter -n $PROJECT
+
+# Set HTTP-Access to ImageRegistry.
+vim /etc/docker/daemon.json
+{"insecure-registries": ["default-route-openshift-image-registry.apps-crc.testing:443"]}
+systemctl restart docker
+docker info 2> /dev/null | tail -5
+
+# Login to ImageRegistry.
+oc whoami -t | docker login -u kubeadmin --password-stdin https://default-route-openshift-image-registry.apps-crc.testing:443
+docker logout https://default-route-openshift-image-registry.apps-crc.testing:443
+
+# Creating ImageStreams.
+docker tag quay.io/jupyteronopenshift/jupyterhub:3.4.0 default-route-openshift-image-registry.apps-crc.testing:443/jupyter/jupyterhub:3.4.0
+docker push default-route-openshift-image-registry.apps-crc.testing:443/jupyter/jupyterhub:3.4.0
+
+docker tag postgres:9.6 default-route-openshift-image-registry.apps-crc.testing:443/jupyter/postgres:9.6
+docker push default-route-openshift-image-registry.apps-crc.testing:443/jupyter/postgres:9.6
+
+docker tag quay.io/jupyteronopenshift/s2i-minimal-notebook-py36:2.5.1 default-route-openshift-image-registry.apps-crc.testing:443/jupyter/s2i-minimal-notebook-py36:2.5.1
+docker push default-route-openshift-image-registry.apps-crc.testing:443/jupyter/s2i-minimal-notebook-py36:2.5.1
+
+docker tag quay.io/thoth-station/s2i-minimal-py38-notebook:v1.0.0 default-route-openshift-image-registry.apps-crc.testing:443/jupyter/s2i-minimal-py38-notebook:v1.0.0
+docker push default-route-openshift-image-registry.apps-crc.testing:443/jupyter/s2i-minimal-py38-notebook:v1.0.0
+
+docker tag jupyter/pyspark-notebook:python-3.8 default-route-openshift-image-registry.apps-crc.testing:443/jupyter/pyspark-notebook:python-3.8
+docker push default-route-openshift-image-registry.apps-crc.testing:443/jupyter/pyspark-notebook:python-3.8
+
+# Creating PV.
+;oc create -f jupyterhub-deployer_pv.json
+oc apply -f jupyterhub-deployer_pv.json
+
+# Creating PV and PVC for users.
+oc apply -f jupyterhub_pv_admin.json
+oc apply -f jupyterhub_pv_jupyter.json
+oc apply -f jupyterhub_pvc_jupyter.json
+oc apply -f jupyterhub_pvc_admin.json
+
+oc apply -f jupyterhub_pv_sharedrwx.json
+oc apply -f jupyterhub_pvc_sharedrwx.json
+
+# Creating ConfigMaps/
+;oc create configmap jupyterhub-cfg --from-file=jupyterhub_config.py
+
+# Creating Template.
+;oc create -f jupyterhub-deployer_template.json
+oc apply -f jupyterhub-deployer_template.json
+
+# Deleting Resources.
+oc project jupyter
+oc delete dc/jupyterhub
+oc delete dc/jupyterhub-db
+oc delete svc/jupyterhub
+oc delete svc/jupyterhub-db
+oc delete route/jupyterhub
+oc delete cm/jupyterhub-cfg
+oc delete pvc/pvc-jupyterhub-db
+oc delete pv/pv-jupyterhub-db
+oc delete template/jupyterhub-deployer
+;oc delete project/jupyter

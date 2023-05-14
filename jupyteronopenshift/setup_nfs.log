@@ -1,0 +1,28 @@
+# Install packeges.
+yum install -y rpcbind nfs-utils
+
+# Creating directory.
+mkdir -p /var/share/nfs
+
+vim /etc/exports
+/var/share/nfs 192.168.68.0/24(rw) 192.168.130.0/24(rw)
+
+# Starting services.
+exportfs -ra
+exportfs -v
+
+systemctl start rpcbind
+systemctl start nfs-server
+systemctl start nfs-lock
+systemctl start nfs-idmap
+systemctl enable rpcbind
+systemctl enable nfs-server
+systemctl enable nfs-lock
+systemctl enable nfs-idmap
+
+# Checking directory from NFS client.
+ssh -i ~/.crc/machines/crc/id_ecdsa core@192.168.130.11
+
+mkdir -p /mnt/nfs
+mount -t nfs 192.168.68.19:/var/share/nfs /mnt/nfs
+umount /mnt/nfs
