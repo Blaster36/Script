@@ -1,0 +1,21 @@
+# build image ...
+# docker stop jupyterhub
+# docker rm jupyterhub
+# docker rmi jupyterhub:3.1.1-custom
+# docker image build -t jupyterhub/jupyterhub:3.1.1-custom -f Dockerfile.hub . --no-cache
+# docker run -v /run/podman/podman.sock:/var/run/docker.sock  -p 8000:8000 -p 8001:8001 -p 8081:8081 -d --name jupyterhub --net jupyterhub jupyterhub/jupyterhub:3.1.1-custom
+FROM jupyterhub/jupyterhub:3.1.1
+
+#RUN python3 -m pip install jupyterhub==3.1.1
+#RUN python3 -m pip install IPython==7.16.1 jupyter_client==6.1.12 notebook==6.4.0 jupyterlab==1.2.14
+#RUN python3 -m pip install docker==5.0.3 dockerspawner==12.0.0 escapism==1.0.1 podmanclispawner==0.1.0
+#RUN python3 -m pip install PyOpenSSL==19.1.0 ldap3==2.7 jupyterhub-ldapauthenticator==1.3.0 pyasn1==0.4.8
+RUN python3 -m pip install IPython jupyter_client notebook jupyterlab docker dockerspawner escapism podmanclispawner PyOpenSSL ldap3 jupyterhub-ldapauthenticator pyasn1
+
+WORKDIR /srv/jupyterhub
+COPY ./jupyterhub_config_container.py /srv/jupyterhub/
+
+EXPOSE 8000 8001 8081
+
+CMD ["jupyterhub", "-f", "/srv/jupyterhub/jupyterhub_config_container.py", "--debug"]
+
