@@ -1,6 +1,6 @@
 # JupyterHub on Podman
 
-- JupyterHub on Podmantの投稿記事で紹介したCodeを公開中
+- JupyterHub on Podmanの投稿記事で紹介したCodeを公開中
 
 ## 公開ファイル群
 
